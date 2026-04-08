@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دانيال & آنا — Wedding Invitation</title>
+
+  <!-- Fonts: English -->
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <!-- Fonts: Arabic -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --burgundy:    #660000;
+      --burgundy-md: #8a1a1a;
+      --gold:        #7a5800;
+      --gold-light:  #9a7010;
+      --gold-dim:    rgba(102,76,0,0.22);
+      --ink:         #0d0a08;
+      --ink-mid:     #2e2218;
+      --ink-light:   #5a4a3a;
+      --bg:          #f8f4ef;
+      --card:        rgba(255,252,248,0.92);
+      --card-border: rgba(102,0,0,0.18);
+      --white:       #fffdf9;
+      --arabic-green: #1a4a2e;
+      --arabic-green-light: #2d6b44;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    html[lang="ar"] body {
+      font-family: 'Noto Naskh Arabic', serif;
+      direction: rtl;
+    }
+
+    /* ── LANGUAGE TOGGLE ── */
+    #lang-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 10000;
+      display: flex;
+      border: 1px solid rgba(102,0,0,0.35);
+      border-radius: 2px;
+      overflow: hidden;
+      background: rgba(255,252,248,0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 18px rgba(102,0,0,0.1);
+    }
+    html[lang="ar"] #lang-toggle {
+      right: auto;
+      left: 18px;
+    }
+    #lang-toggle button {
+      padding: 9px 18px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 400;
+      transition: background 0.3s, color 0.3s;
+      user-select: none;
+    }
+    #lang-toggle button.active {
+      background: var(--burgundy);
+      color: var(--white);
+      letter-spacing: 0.25em;
+    }
+    #lang-toggle .divider {
+      width: 1px;
+      background: rgba(102,0,0,0.2);
+      align-self: stretch;
+    }
+
+    /* Language visibility */
+    .ar { display: none; }
+    html[lang="ar"] .ar { display: block; }
+    html[lang="ar"] .en { display: none; }
+    html[lang="ar"] .ar-inline { display: inline; }
+    html[lang="ar"] .en-inline { display: none; }
+    .ar-inline { display: none; }
+    .en-inline { display: inline; }
+
+    /* ── ARABIC GEOMETRIC ORNAMENT (SVG inline pattern) ── */
+    .arabic-ornament {
+      display: block;
+      text-align: center;
+      color: var(--gold);
+      font-size: clamp(22px, 5vw, 34px);
+      letter-spacing: 0.2em;
+      line-height: 1;
+      opacity: 0.55;
+      margin: 0 auto;
+      pointer-events: none;
+    }
+
+    /* Star of David style 8-point star SVG pattern band */
+    .geo-band {
+      width: 100%;
+      height: 28px;
+      overflow: hidden;
+      opacity: 0.13;
+      pointer-events: none;
+    }
+
+    /* ── SPLASH ── */
+    body.splash-active { overflow: hidden; }
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0a0500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: max(clamp(36px, 8vh, 80px), env(safe-area-inset-bottom, 0px) + 36px);
+      cursor: pointer;
+      height: 100dvh;
+      height: 100vh;
+    }
+    @supports (height: 100dvh) { #splash { height: 100dvh; } }
+
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #splash video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+    }
+
+    /* Dark vignette overlay */
+    #splash::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.72) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Bottom gradient */
+    #splash::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 70%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 clamp(20px, 8vw, 60px);
+      width: 100%;
+      max-width: 680px;
+      pointer-events: none;
+    }
+
+    /* Geometric top ornament on splash */
+    .splash-geo-top {
+      margin-bottom: clamp(18px, 4vh, 32px);
+      opacity: 0;
+      animation: fadeIn 1.2s 0.2s ease forwards;
+    }
+    .splash-geo-top svg {
+      width: clamp(60px, 14vw, 100px);
+      height: auto;
+      opacity: 0.6;
+    }
+
+    /* Assalamu Alaikum */
+    .splash-salam {
+      font-family: 'Scheherazade New', serif;
+      font-size: clamp(28px, 7vw, 52px);
+      color: #c9a84c;
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      font-weight: 600;
+      text-shadow: 0 0 40px rgba(201,168,76,0.5), 0 2px 12px rgba(0,0,0,0.6);
+      opacity: 0;
+      animation: fadeUp 1.4s 0.5s ease forwards;
+      margin-bottom: clamp(6px, 2vh, 12px);
+    }
+
+    /* English transliteration */
+    .splash-salam-latin {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2.8vw, 17px);
+      color: rgba(201,168,76,0.7);
+      letter-spacing: 0.25em;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s ease forwards;
+      margin-bottom: clamp(22px, 5vh, 42px);
+    }
+
+    /* Divider */
+    .splash-hr {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 3vw, 20px);
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s ease forwards;
+      margin-bottom: clamp(18px, 4vh, 36px);
+    }
+    .splash-hr span {
+      flex: 1;
+      max-width: 120px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.5));
+    }
+    .splash-hr span:last-child {
+      background: linear-gradient(to left, transparent, rgba(201,168,76,0.5));
+    }
+    .splash-hr i {
+      color: #c9a84c;
+      font-style: normal;
+      font-size: 14px;
+      opacity: 0.75;
+    }
+
+    /* Quranic verse */
+    .splash-verse-ar {
+      font-family: 'Amiri', serif;
+      font-size: clamp(20px, 5.5vw, 38px);
+      color: #f5e6c8;
+      line-height: 1.8;
+      font-weight: 400;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.7);
+      opacity: 0;
+      animation: fadeUp 1.4s 1.8s ease forwards;
+      margin-bottom: clamp(6px, 1.5vh, 10px);
+      direction: rtl;
+    }
+
+    .splash-verse-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: rgba(245,230,200,0.65);
+      letter-spacing: 0.12em;
+      opacity: 0;
+      animation: fadeIn 1s 2.6s ease forwards;
+      margin-bottom: clamp(24px, 5vh, 44px);
+    }
+
+    /* Tap hint */
+    .splash-tap {
+      font-family: 'Raleway', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      opacity: 0;
+      animation: fadeIn 1s 3.4s ease forwards;
+      margin-top: 4px;
+    }
+
+    /* ── BACKGROUND / MAIN ── */
+    #main {
+      min-height: 100vh;
+      background: url('background.jpg') center top / cover fixed;
+      position: relative;
+    }
+    #main::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(248,244,239,0.55) 0%,
+        rgba(248,244,239,0.25) 40%,
+        rgba(248,244,239,0.50) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    #main::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    section { position: relative; z-index: 1; }
+
+    /* ── BISMILLAH BANNER ── */
+    #bismillah-banner {
+      text-align: center;
+      padding: clamp(18px, 4vh, 32px) 24px clamp(8px, 2vh, 16px);
+      position: relative;
+      z-index: 1;
+    }
+    .bismillah-text {
+      font-family: 'Amiri', serif;
+      font-size: clamp(20px, 5vw, 32px);
+      color: var(--gold);
+      opacity: 0.75;
+      letter-spacing: 0.12em;
+      direction: rtl;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    /* Arabic geometric corner frames */
+    .frame-corner {
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      opacity: 0.22;
+    }
+    .frame-corner svg { width: 100%; height: 100%; }
+    .frame-tl { top: 16px; left: 16px; }
+    .frame-tr { top: 16px; right: 16px; transform: scaleX(-1); }
+    .frame-bl { bottom: 16px; left: 16px; transform: scaleY(-1); }
+    .frame-br { bottom: 16px; right: 16px; transform: scale(-1,-1); }
+
+    .hero-eyebrow {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(9px, 1.6vw, 12px);
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 1.2s 0.2s ease forwards;
+    }
+    html[lang="ar"] .hero-eyebrow {
+      font-family: 'Noto Naskh Arabic', serif;
+      letter-spacing: 0.2em;
+      font-size: clamp(12px, 2.2vw, 16px);
+      font-weight: 500;
+    }
+
+    .hero-rule {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 auto 24px;
+      width: fit-content;
+      opacity: 0;
+      animation: fadeUp 1.2s 0.4s ease forwards;
+    }
+    .hero-rule span { display: block; width: 70px; height: 1px; background: linear-gradient(to right, transparent, var(--burgundy)); }
+    .hero-rule span:last-child { background: linear-gradient(to left, transparent, var(--burgundy)); }
+    .hero-rule i { color: var(--burgundy); font-style: normal; font-size: 10px; letter-spacing: 0.3em; opacity: 0.5; }
+
+    .hero-names {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1.2s 0.6s ease forwards;
+    }
+
+    .partner-name {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(56px, 13vw, 110px);
+      font-weight: 400;
+      color: var(--burgundy);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      text-shadow: 0 4px 30px rgba(102,0,0,0.18);
+    }
+    html[lang="ar"] .partner-name {
+      font-family: 'Amiri', serif;
+      font-size: clamp(42px, 10vw, 86px);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-ampersand {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(48px, 10vw, 88px);
+      color: var(--gold);
+      opacity: 0.8;
+      line-height: 1;
+      padding-bottom: 8px;
+    }
+    html[lang="ar"] .hero-ampersand {
+      font-family: 'Amiri', serif;
+      font-style: normal;
+      font-size: clamp(40px, 9vw, 76px);
+    }
+
+    .hero-lineage-row {
+      display: flex;
+      gap: 60px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      opacity: 0;
+      animation: fadeUp 1.2s 0.85s ease forwards;
+    }
+    .hero-lineage-block { text-align: center; }
+
+    .lineage-full {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(13px, 2.2vw, 16px);
+      color: var(--ink-mid);
+      letter-spacing: 0.04em;
+      font-weight: 400;
+    }
+    html[lang="ar"] .lineage-full {
+      font-family: 'Amiri', serif;
+      font-style: normal;
+      font-size: clamp(14px, 2.5vw, 18px);
+      font-weight: 400;
+    }
+
+    .lineage-parents {
+      font-size: clamp(10px, 1.6vw, 12px);
+      letter-spacing: 0.06em;
+      color: var(--ink-light);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .lineage-parents {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: clamp(11px, 1.8vw, 14px);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-event-type {
+      margin-top: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(16px, 3.5vw, 22px);
+      color: var(--ink-mid);
+      letter-spacing: 0.12em;
+      opacity: 0;
+      animation: fadeUp 1.2s 1s ease forwards;
+      font-weight: 400;
+    }
+    html[lang="ar"] .hero-event-type {
+      font-family: 'Amiri', serif;
+      font-style: normal;
+      font-size: clamp(16px, 3.5vw, 22px);
+      letter-spacing: 0.06em;
+    }
+
+    .hero-details {
+      margin-top: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 1.2s 1.2s ease forwards;
+      border: 1px solid var(--card-border);
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    /* Arabic geometric top-border on hero-details */
+    .hero-details::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 3px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--burgundy) 0px,
+        var(--burgundy) 8px,
+        var(--gold) 8px,
+        var(--gold) 10px,
+        transparent 10px,
+        transparent 14px
+      );
+      opacity: 0.45;
+      flex-basis: 100%;
+    }
+
+    .hero-detail-block {
+      text-align: center;
+      padding: 20px 40px;
+      position: relative;
+    }
+    .hero-detail-block:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 20%; height: 60%; width: 1px;
+      background: var(--card-border);
+    }
+    .hero-detail-block .label {
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .hero-detail-block .label {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+    .hero-detail-block .value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 3.5vw, 24px);
+      font-weight: 400;
+      color: var(--burgundy);
+      letter-spacing: 0.04em;
+    }
+    html[lang="ar"] .hero-detail-block .value {
+      font-family: 'Amiri', serif;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ARABIC CORNER SVG ── */
+    /* Inline corner ornament inspired by Islamic geometry */
+
+    /* ── SECTION SHARED ── */
+    .section-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 90px 32px;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .section-label {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 400;
+      color: var(--burgundy);
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+    }
+    html[lang="ar"] .section-title {
+      font-family: 'Amiri', serif;
+      letter-spacing: 0.04em;
+      font-size: clamp(26px, 4.5vw, 40px);
+    }
+
+    .section-rule {
+      position: relative;
+      width: 100%;
+      max-width: 260px;
+      margin: 0 auto 16px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .section-rule::before, .section-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+    .section-rule-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(15px, 2.5vw, 18px);
+      color: var(--ink-mid);
+      margin-bottom: 60px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .section-sub {
+      font-family: 'Amiri', serif;
+      font-style: normal;
+      font-size: clamp(15px, 2.8vw, 20px);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding: 20px 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--card-border) 15%, var(--card-border) 85%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    .timeline-item:nth-child(odd) { flex-direction: row-reverse; text-align: right; }
+    .timeline-item:nth-child(even) { text-align: left; }
+    html[lang="ar"] .timeline-item:nth-child(odd) { text-align: left; }
+    html[lang="ar"] .timeline-item:nth-child(even) { text-align: right; }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      transform: translateX(-50%);
+      width: 12px; height: 12px;
+      background: var(--burgundy);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 4px rgba(102,0,0,0.12), 0 0 16px rgba(102,0,0,0.15);
+      z-index: 2;
+      /* Arabic star shape */
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .timeline-content {
+      width: calc(50% - 50px);
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 2px;
+      padding: 26px 30px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold), var(--burgundy));
+      opacity: 0.3;
+    }
+    .timeline-content:hover {
+      border-color: rgba(102,0,0,0.28);
+      box-shadow: 0 4px 24px rgba(102,0,0,0.08);
+    }
+
+    .timeline-time {
+      font-size: 9px;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .timeline-time {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+
+    .timeline-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(18px, 3vw, 22px);
+      font-weight: 400;
+      color: var(--burgundy);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+    html[lang="ar"] .timeline-title {
+      font-family: 'Amiri', serif;
+      font-size: clamp(18px, 3.2vw, 24px);
+    }
+
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.75;
+      font-weight: 400;
+    }
+    html[lang="ar"] .timeline-desc {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    /* ── VENUE CARD ── */
+    .venue-card {
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 2px;
+      padding: 50px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Arabic geometric watermark in venue card */
+    .venue-card::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px; height: 280px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35' fill='none' stroke='%23660000' stroke-width='1.5'/%3E%3Cpolygon points='50,15 58,38 83,38 63,52 71,76 50,62 29,76 37,52 17,38 42,38' fill='none' stroke='%237a5800' stroke-width='0.8' opacity='0.6'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .venue-card > * { position: relative; z-index: 1; }
+
+    .venue-name {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(22px, 4.5vw, 32px);
+      font-weight: 400;
+      color: var(--burgundy);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    html[lang="ar"] .venue-name {
+      font-family: 'Amiri', serif;
+    }
+
+    .venue-address {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2.5vw, 17px);
+      color: var(--ink-mid);
+      margin-bottom: 32px;
+      font-weight: 400;
+    }
+    html[lang="ar"] .venue-address {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-style: normal;
+    }
+
+    .map-embed {
+      width: 100%;
+      height: 270px;
+      border: none;
+      border-radius: 2px;
+      filter: grayscale(20%) sepia(18%) saturate(0.85);
+      margin-bottom: 28px;
+    }
+
+    .btn-directions {
+      display: inline-block;
+      padding: 15px 46px;
+      border: 1px solid var(--burgundy);
+      color: var(--burgundy);
+      font-size: 9px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 400;
+      transition: background 0.35s, color 0.35s, letter-spacing 0.35s;
+    }
+    html[lang="ar"] .btn-directions {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+    .btn-directions:hover {
+      background: var(--burgundy);
+      color: var(--white);
+      letter-spacing: 0.6em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 24px 60px;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      line-height: 2.5;
+      font-weight: 500;
+    }
+    html[lang="ar"] footer {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: none;
+    }
+
+    .footer-rule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 auto 24px;
+      max-width: 300px;
+    }
+    .footer-rule::before, .footer-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+    .footer-rule i {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      opacity: 0.4;
+      display: block;
+    }
+
+    /* Footer Quran blessing */
+    .footer-dua {
+      font-family: 'Amiri', serif;
+      font-size: clamp(16px, 3.5vw, 22px);
+      color: var(--gold);
+      opacity: 0.7;
+      direction: rtl;
+      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 768px) {
+      #hero { padding: 80px 22px 56px; }
+      .hero-detail-block { padding: 18px 28px; }
+      .section-wrapper { padding: 70px 24px; }
+      .venue-card { padding: 34px 24px; }
+      .hero-lineage-row { gap: 30px; }
+    }
+
+    @media (max-width: 600px) {
+      #main { background-attachment: scroll; }
+      #hero { min-height: 100svh; padding: 90px 18px 56px; }
+      .hero-eyebrow { font-size: 9px; letter-spacing: 0.3em; margin-bottom: 16px; }
+      .hero-rule span { width: 44px; }
+      .hero-names { flex-direction: column; align-items: center; gap: 0; }
+      .partner-name { font-size: clamp(52px, 16vw, 72px); }
+      .hero-ampersand { font-size: clamp(38px, 12vw, 56px); padding: 0; line-height: 1.1; }
+      .hero-lineage-row { flex-direction: column; gap: 14px; }
+      .hero-details { flex-direction: column; width: 100%; max-width: 300px; margin-top: 32px; }
+      .hero-detail-block { padding: 18px 24px; }
+      .hero-detail-block:not(:last-child)::after {
+        top: auto; right: 20%; bottom: 0; left: 20%;
+        width: 60%; height: 1px; background: var(--card-border);
+      }
+      .hero-detail-block .value { font-size: 20px; }
+      .timeline::before { left: 14px; transform: none; }
+      .timeline-item,
+      .timeline-item:nth-child(odd) { flex-direction: row; text-align: left; padding-left: 44px; }
+      html[lang="ar"] .timeline-item,
+      html[lang="ar"] .timeline-item:nth-child(odd) { text-align: right; padding-left: 0; padding-right: 44px; }
+      html[lang="ar"] .timeline::before { left: auto; right: 14px; }
+      html[lang="ar"] .timeline-dot { left: auto; right: 14px; }
+      .timeline-dot { left: 14px; }
+      .timeline-content { width: 100%; padding: 18px 20px; }
+      .venue-card { padding: 28px 18px; }
+      .map-embed { height: 210px; }
+      .btn-directions { width: 100%; display: block; text-align: center; padding: 16px; }
+      .section-wrapper { padding: 56px 18px; }
+      footer { padding: 32px 18px 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANGUAGE TOGGLE -->
+  <div id="lang-toggle">
+    <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+    <div class="divider"></div>
+    <button id="btn-ar" onclick="setLang('ar')">عربي</button>
+  </div>
+
+  <!-- SPLASH -->
+  <div id="splash">
+    <video id="splashVideo" autoplay muted playsinline preload="auto" poster="poster.jpg">
+      <source src="arabic_splash.mp4" type="video/mp4" />
+    </video>
+
+    <div class="splash-content">
+
+      <!-- Geometric star ornament -->
+      <div class="splash-geo-top">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <polygon points="60,6 74,42 114,42 82,66 94,102 60,80 26,102 38,66 6,42 46,42"
+                   stroke="#c9a84c" stroke-width="1.5" fill="rgba(201,168,76,0.06)"/>
+          <polygon points="60,18 70,46 100,46 76,62 86,90 60,74 34,90 44,62 20,46 50,46"
+                   stroke="#c9a84c" stroke-width="0.7" opacity="0.5"/>
+          <circle cx="60" cy="60" r="52" stroke="#c9a84c" stroke-width="0.4" opacity="0.3" stroke-dasharray="3 5"/>
+        </svg>
+      </div>
+
+      <!-- السلام عليكم -->
+      <div class="splash-salam">السَّلَامُ عَلَيْكُمْ</div>
+      <div class="splash-salam-latin">Assalamu Alaikum &nbsp;·&nbsp; Peace be upon you</div>
+
+      <!-- Decorative divider -->
+      <div class="splash-hr">
+        <span></span>
+        <i>✦</i>
+        <i style="font-size:9px; opacity:0.5; margin: 0 4px;">❖</i>
+        <i>✦</i>
+        <span></span>
+      </div>
+
+      <!-- Quranic verse -->
+      <div class="splash-verse-ar">وَخَلَقْنَاكُمْ أَزْوَاجًا</div>
+      <div class="splash-verse-en">"And We created you in pairs" &nbsp;—&nbsp; Quran 78:8</div>
+
+      <div class="splash-tap">tap anywhere to continue</div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- BISMILLAH -->
+    <div id="bismillah-banner">
+      <div class="bismillah-text reveal">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+
+      <!-- Arabic Geometric Corner Frames -->
+      <div class="frame-corner frame-tl">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M2 2 L28 2 L2 28 Z" stroke="#660000" stroke-width="1"/>
+          <path d="M2 2 L18 2 L2 18 Z" stroke="#7a5800" stroke-width="0.7" opacity="0.6"/>
+          <polygon points="32,2 38,12 50,12 41,19 44,31 32,24 20,31 23,19 14,12 26,12" stroke="#660000" stroke-width="0.8" fill="rgba(102,0,0,0.04)"/>
+          <line x1="2" y1="2" x2="62" y2="2" stroke="#660000" stroke-width="0.8"/>
+          <line x1="2" y1="2" x2="2" y2="62" stroke="#660000" stroke-width="0.8"/>
+          <line x1="2" y1="8" x2="10" y2="2" stroke="#7a5800" stroke-width="0.5" opacity="0.5"/>
+          <line x1="2" y1="14" x2="16" y2="2" stroke="#7a5800" stroke-width="0.5" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="frame-corner frame-tr">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M2 2 L28 2 L2 28 Z" stroke="#660000" stroke-width="1"/>
+          <path d="M2 2 L18 2 L2 18 Z" stroke="#7a5800" stroke-width="0.7" opacity="0.6"/>
+          <polygon points="32,2 38,12 50,12 41,19 44,31 32,24 20,31 23,19 14,12 26,12" stroke="#660000" stroke-width="0.8" fill="rgba(102,0,0,0.04)"/>
+          <line x1="2" y1="2" x2="62" y2="2" stroke="#660000" stroke-width="0.8"/>
+          <line x1="2" y1="2" x2="2" y2="62" stroke="#660000" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="frame-corner frame-bl">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M2 2 L28 2 L2 28 Z" stroke="#660000" stroke-width="1"/>
+          <path d="M2 2 L18 2 L2 18 Z" stroke="#7a5800" stroke-width="0.7" opacity="0.6"/>
+          <polygon points="32,2 38,12 50,12 41,19 44,31 32,24 20,31 23,19 14,12 26,12" stroke="#660000" stroke-width="0.8" fill="rgba(102,0,0,0.04)"/>
+          <line x1="2" y1="2" x2="62" y2="2" stroke="#660000" stroke-width="0.8"/>
+          <line x1="2" y1="2" x2="2" y2="62" stroke="#660000" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="frame-corner frame-br">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M2 2 L28 2 L2 28 Z" stroke="#660000" stroke-width="1"/>
+          <path d="M2 2 L18 2 L2 18 Z" stroke="#7a5800" stroke-width="0.7" opacity="0.6"/>
+          <polygon points="32,2 38,12 50,12 41,19 44,31 32,24 20,31 23,19 14,12 26,12" stroke="#660000" stroke-width="0.8" fill="rgba(102,0,0,0.04)"/>
+          <line x1="2" y1="2" x2="62" y2="2" stroke="#660000" stroke-width="0.8"/>
+          <line x1="2" y1="2" x2="2" y2="62" stroke="#660000" stroke-width="0.8"/>
+        </svg>
+      </div>
+
+      <p class="hero-eyebrow">
+        <span class="en-inline">Together with their families</span>
+        <span class="ar-inline">مع عائلتيهما الكريمتين</span>
+      </p>
+
+      <div class="hero-rule">
+        <span></span>
+        <i>✦ ❖ ✦</i>
+        <span></span>
+      </div>
+
+      <div class="hero-names">
+        <div class="partner-name">
+          <span class="en-inline">Daniel</span>
+          <span class="ar-inline">دانيال</span>
+        </div>
+        <div class="hero-ampersand">
+          <span class="en-inline">&amp;</span>
+          <span class="ar-inline">و</span>
+        </div>
+        <div class="partner-name">
+          <span class="en-inline">Ana</span>
+          <span class="ar-inline">آنا</span>
+        </div>
+      </div>
+
+      <div class="hero-lineage-row">
+        <div class="hero-lineage-block">
+          <div class="lineage-full">
+            <span class="en-inline">Daniel James Hartmann</span>
+            <span class="ar-inline">دانيال جيمس هارتمان</span>
+          </div>
+          <div class="lineage-parents">
+            <span class="en-inline">S/o Mr. &amp; Mrs. Robert Hartmann</span>
+            <span class="ar-inline">نجل السيد والسيدة روبرت هارتمان</span>
+          </div>
+        </div>
+        <div class="hero-lineage-block">
+          <div class="lineage-full">
+            <span class="en-inline">Ana Sofia Müller</span>
+            <span class="ar-inline">آنا صوفيا مولر</span>
+          </div>
+          <div class="lineage-parents">
+            <span class="en-inline">D/o Mr. &amp; Mrs. Klaus Müller</span>
+            <span class="ar-inline">كريمة السيد والسيدة كلاوس مولر</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-event-type">
+        <span class="en-inline">request the honour of your presence at their wedding</span>
+        <span class="ar-inline">يتشرفان بدعوتكم لحضور حفل زفافهما</span>
+      </div>
+
+      <div class="hero-details">
+        <div class="hero-detail-block">
+          <div class="label">
+            <span class="en-inline">Date</span>
+            <span class="ar-inline">التاريخ</span>
+          </div>
+          <div class="value">
+            <span class="en-inline">1st July, 2027</span>
+            <span class="ar-inline">١ يوليو ٢٠٢٧</span>
+          </div>
+        </div>
+        <div class="hero-detail-block">
+          <div class="label">
+            <span class="en-inline">Venue</span>
+            <span class="ar-inline">المكان</span>
+          </div>
+          <div class="value">
+            <span class="en-inline">Schloss Benrath</span>
+            <span class="ar-inline">قصر بنراث</span>
+          </div>
+        </div>
+        <div class="hero-detail-block">
+          <div class="label">
+            <span class="en-inline">Time</span>
+            <span class="ar-inline">الوقت</span>
+          </div>
+          <div class="value">
+            <span class="en-inline">6:00 – 10:00 PM</span>
+            <span class="ar-inline">٦:٠٠ – ١٠:٠٠ م</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENING PROGRAMME -->
+    <section id="programme">
+      <div class="section-wrapper">
+
+        <p class="section-label reveal">
+          <span class="en-inline">Schedule</span>
+          <span class="ar-inline">البرنامج</span>
+        </p>
+        <h2 class="section-title reveal reveal-d1">
+          <span class="en">Evening Programme</span>
+          <span class="ar">برنامج الأمسية</span>
+        </h2>
+        <div class="section-rule reveal reveal-d2">
+          <div class="section-rule-diamond"></div>
+        </div>
+        <p class="section-sub reveal reveal-d3">
+          <span class="en">An evening crafted with elegance, joy &amp; love</span>
+          <span class="ar">أمسية تجمع بين الأناقة والفرح والمحبة</span>
+        </p>
+
+        <div class="timeline">
+
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-time">
+                <span class="en-inline">6:00 PM</span>
+                <span class="ar-inline">٦:٠٠ مساءً</span>
+              </div>
+              <div class="timeline-title">
+                <span class="en">Arrival &amp; Reception</span>
+                <span class="ar">الاستقبال والترحيب</span>
+              </div>
+              <div class="timeline-desc">
+                <span class="en">Guests are welcomed with champagne, seasonal florals, and the warmth of an evening to remember.</span>
+                <span class="ar">يُرحَّب بالضيوف بالمشروبات والأزهار الموسمية في أجواء دافئة لا تُنسى.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-time">
+                <span class="en-inline">6:45 PM</span>
+                <span class="ar-inline">٦:٤٥ مساءً</span>
+              </div>
+              <div class="timeline-title">
+                <span class="en">Ceremony</span>
+                <span class="ar">مراسم العقد</span>
+              </div>
+              <div class="timeline-desc">
+                <span class="en">The exchange of vows in an intimate and beautifully decorated ceremony hall.</span>
+                <span class="ar">تبادل العهود في قاعة مزيّنة بأبهى الزينة في أجواء حميمة.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-time">
+                <span class="en-inline">7:45 PM</span>
+                <span class="ar-inline">٧:٤٥ مساءً</span>
+              </div>
+              <div class="timeline-title">
+                <span class="en">Cocktail Hour</span>
+                <span class="ar">ساعة الضيافة</span>
+              </div>
+              <div class="timeline-desc">
+                <span class="en">Mingle, celebrate, and enjoy fine drinks and canapés in the grand salon.</span>
+                <span class="ar">تواصل واحتفل مع الأحباب واستمتع بالمقبلات الفاخرة في الصالة الكبرى.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-time">
+                <span class="en-inline">8:30 PM</span>
+                <span class="ar-inline">٨:٣٠ مساءً</span>
+              </div>
+              <div class="timeline-title">
+                <span class="en">Dinner &amp; Celebration</span>
+                <span class="ar">العشاء والاحتفال</span>
+              </div>
+              <div class="timeline-desc">
+                <span class="en">A curated multi-course dinner followed by dancing, toasts, and unforgettable moments.</span>
+                <span class="ar">عشاء فاخر متعدد الأطباق تعقبه الأفراح والرقص ولحظات لن تُنسى.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- VENUE / LOCATION -->
+    <section id="location">
+      <div class="section-wrapper">
+
+        <p class="section-label reveal">
+          <span class="en-inline">Where to find us</span>
+          <span class="ar-inline">الموقع</span>
+        </p>
+        <h2 class="section-title reveal reveal-d1">
+          <span class="en">Venue</span>
+          <span class="ar">مكان الحفل</span>
+        </h2>
+        <div class="section-rule reveal reveal-d2">
+          <div class="section-rule-diamond"></div>
+        </div>
+        <p class="section-sub reveal reveal-d3">
+          <span class="en">Find us here on the evening</span>
+          <span class="ar">نلتقي هنا في هذه الليلة المباركة</span>
+        </p>
+
+        <div class="venue-card reveal">
+          <div class="venue-name">
+            <span class="en">Schloss Benrath</span>
+            <span class="ar">قصر بنراث</span>
+          </div>
+          <div class="venue-address">
+            <span class="en">Benrather Schloßallee 100–106, 40597 Düsseldorf, Germany</span>
+            <span class="ar">بنراثر شلوسالي ١٠٠–١٠٦، ٤٠٥٩٧ دوسلدورف، ألمانيا</span>
+          </div>
+          <iframe
+            class="map-embed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2502.7!2d6.8726!3d51.1528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47b8c87e09f3b7bb%3A0xa4a7e1b5f1c3e3e5!2sSchloss+Benrath!5e0!3m2!1sen!2sde!4v1680000000000"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          <br />
+          <a href="https://www.google.com/maps/search/Schloss+Benrath+Düsseldorf+Germany"
+             target="_blank" class="btn-directions">
+            <span class="en-inline">Get Directions</span>
+            <span class="ar-inline">احصل على الاتجاهات</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-dua reveal">بَارَكَ اللهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ</div>
+      <div class="footer-rule"><i></i></div>
+      <span class="en">
+        We look forward to celebrating with you<br/>
+        Mr. &amp; Mrs. Robert Hartmann &nbsp;·&nbsp; Mr. &amp; Mrs. Klaus Müller
+      </span>
+      <span class="ar" style="display:none;">
+        نتطلع إلى الاحتفال معكم<br/>
+        السيد والسيدة روبرت هارتمان &nbsp;·&nbsp; السيد والسيدة كلاوس مولر
+      </span>
+    </footer>
+
+  </div><!-- /main -->
+
+  <script>
+    // ── LANGUAGE TOGGLE ──
+    function setLang(lang) {
+      const html = document.documentElement;
+      html.lang = lang;
+      html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+
+      // Toggle block-level AR/EN elements
+      document.querySelectorAll('.ar').forEach(el => {
+        el.style.display = lang === 'ar' ? 'block' : 'none';
+      });
+      document.querySelectorAll('.en').forEach(el => {
+        el.style.display = lang === 'ar' ? 'none' : 'block';
+      });
+
+      // Toggle inline AR/EN elements
+      document.querySelectorAll('.ar-inline').forEach(el => {
+        el.style.display = lang === 'ar' ? 'inline' : 'none';
+      });
+      document.querySelectorAll('.en-inline').forEach(el => {
+        el.style.display = lang === 'ar' ? 'none' : 'inline';
+      });
+
+      localStorage.setItem('wedding-lang', lang);
+    }
+
+    // Restore saved preference
+    const saved = localStorage.getItem('wedding-lang');
+    if (saved) setLang(saved);
+
+    // ── SPLASH ──
+    const splashVideo = document.getElementById('splashVideo');
+    const splash      = document.getElementById('splash');
+    let playing  = false;
+    let dismissed = false;
+
+    document.body.classList.add('splash-active');
+
+    splashVideo.addEventListener('canplay', function() {
+      if (!playing) { splashVideo.currentTime = 0; splashVideo.pause(); }
+    }, { once: true });
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      splashVideo.pause();
+      splash.style.transition = 'opacity 0.6s ease';
+      splash.style.opacity = '0';
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        document.body.classList.remove('splash-active');
+      }, 600);
+      tryPlayMusic();
+    }
+
+    function startVideo() {
+      if (playing) return;
+      playing = true;
+      splashVideo.currentTime = 0;
+      splashVideo.play().catch(() => dismiss());
+    }
+
+    splashVideo.addEventListener('ended', dismiss);
+    splashVideo.addEventListener('error', () => setTimeout(dismiss, 400));
+    splash.addEventListener('click', startVideo);
+    splash.addEventListener('touchend', function(e) {
+      e.preventDefault(); startVideo();
+    }, { passive: false });
+
+    // ── MUSIC ──
+    const music = document.getElementById('bgMusic');
+    function tryPlayMusic() {
+      music.volume = 0.3;
+      music.play().catch(() => {
+        document.addEventListener('click',      () => music.play(), { once: true });
+        document.addEventListener('touchstart', () => music.play(), { once: true });
+      });
+    }
+
+    // ── SCROLL REVEAL ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
